@@ -2,6 +2,7 @@
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
+using System;
 
 // minimal OpenTK rendering framework for UU/INFOGR
 // Jacco Bikker, 2016
@@ -41,7 +42,11 @@ class Game
 		// create the render target
 		target = new RenderTarget( screen.width, screen.height );
 		quad = new ScreenQuad();
-   	}
+
+        int lightID = GL.GetUniformLocation(shader.programID, "lightPos");
+        GL.UseProgram(shader.programID);
+        GL.Uniform3(lightID, 0.0f, 10.0f, 10.0f);
+    }
 
 	// tick for background surface
 	public void Tick()
@@ -60,6 +65,7 @@ class Game
 	
 		// prepare matrix for vertex shader
 		Matrix4 transform = Matrix4.CreateFromAxisAngle( new Vector3( 0, 1, 0 ), a );
+        Matrix4 toWorld = transform;
 		transform *= Matrix4.CreateTranslation( 0, -4, -15 );
 		transform *= Matrix4.CreatePerspectiveFieldOfView( 1.2f, 1.3f, .1f, 1000 );
 
@@ -73,8 +79,8 @@ class Game
 			target.Bind();
 
 			// render scene to render target
-			mesh.Render( shader, transform, wood );
-			floor.Render( shader, transform, wood );
+			mesh.Render( shader, transform, toWorld, wood );
+			floor.Render( shader, transform, toWorld, wood );
 
 			// render quad
 			target.Unbind();
@@ -83,8 +89,8 @@ class Game
 		else
 		{
 			// render scene directly to the screen
-			mesh.Render( shader, transform, wood );
-			floor.Render( shader, transform, wood );
+			mesh.Render( shader, transform, toWorld, wood );
+			floor.Render( shader, transform, toWorld, wood );
 		}
 	}
 }
