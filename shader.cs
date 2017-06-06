@@ -13,9 +13,10 @@ public class Shader
 	public int attribute_vuvs;
 	public int uniform_mview;
     public int uniform_toWorld;
+    public int uniform_ambientLight;
 
-	// constructor
-	public Shader( String vertexShader, String fragmentShader )
+    // constructor
+        public Shader( String vertexShader, String fragmentShader )
 	{
 		// compile shaders
 		programID = GL.CreateProgram();
@@ -30,6 +31,7 @@ public class Shader
 		attribute_vuvs = GL.GetAttribLocation( programID, "vUV" );
 		uniform_mview = GL.GetUniformLocation( programID, "transform" );
         uniform_toWorld = GL.GetUniformLocation(programID, "toWorld");
+        uniform_ambientLight = GL.GetUniformLocation(programID, "ambientLight");
 	}
 
 	// loading shaders

@@ -45,6 +45,7 @@ class Game
 
         int lightID = GL.GetUniformLocation(shader.programID, "lightPos");
         GL.UseProgram(shader.programID);
+        // Location of the lamp relative to the camera
         GL.Uniform3(lightID, 0.0f, 10.0f, 10.0f);
     }
 
