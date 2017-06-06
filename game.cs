@@ -35,8 +35,21 @@ namespace Template_P3
             // create the render target
 
             scene = new SceneGraph();
-            scene.AddChild(new Mesh("../../assets/teapot.obj") { localTranslate = new Vector3(0.1f, 0, 0) }, wood);
-            scene.AddChild(new Mesh("../../assets/floor.obj") { localTranslate = new Vector3(-0.1f, 0, 0) }, wood);
+            Mesh teapot = new Mesh("../../assets/teapot.obj")
+            {
+                localTranslate = new Vector3(0, -4, -15),
+                localRotate = new Vector3(0, 1, 0)
+            };
+
+            Mesh babyTeapot = new Mesh("../../assets/teapot.obj") {
+                localTranslate = new Vector3(-5, 2, -7),
+                scale = 0.3f,
+                localRotate = new Vector3(0, 1, 0)
+            };
+
+            teapot.AddChild(babyTeapot, wood);
+            scene.AddChild(teapot, wood);
+            scene.AddChild(new Mesh("../../assets/floor.obj") { localTranslate = new Vector3(0, -4, -15) }, wood);
             // initialize stopwatch
             timer = new Stopwatch();
             timer.Reset();

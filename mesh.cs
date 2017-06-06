@@ -17,7 +17,10 @@ namespace Template_P3
         public ObjQuad[] quads;                 // quads (4 vertex indices)4
         public Texture texture;
 
-        public Vector3 localTranslate = new Vector3(0, 0, 0);
+        public Vector3 localRotate;
+        public Vector3 localTranslate;
+        internal float scale = 1;
+
         const float PI = 3.1415926535f;         // PI
         float a = 0;                            // teapot rotation angle
 
@@ -26,6 +29,7 @@ namespace Template_P3
         int vertexBufferId;                     // vertex buffer
         int triangleBufferId;                   // triangle buffer
         int quadBufferId;                       // quad buffer
+
 
         internal void SetTexture(Texture texture)
         {
@@ -42,13 +46,7 @@ namespace Template_P3
         // render the mesh using the supplied shader and matrix
         public void Render(Shader shader, Matrix4 parentTransform, float frameDuration)
         {
-            Matrix4 transform = Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), a);
-            transform *= Matrix4.CreateTranslation(0, -4, -15);
-            transform *= parentTransform;
-
-            // update rotation
-            a += 0.001f * frameDuration;
-            if (a > 2 * PI) a -= 2 * PI;
+            Matrix4 transform = GetLocalTransform(parentTransform, frameDuration);
 
             foreach (Mesh child in this.children)
             {
@@ -100,6 +98,24 @@ namespace Template_P3
             GL.UseProgram(0);
         }
 
+        private Matrix4 GetLocalTransform(Matrix4 parentTransform, float frameDuration)
+        {
+            Matrix4 transform = Matrix4.Identity;
+            if (this.localRotate != new Vector3())
+            {
+                transform = Matrix4.CreateFromAxisAngle(this.localRotate, a);
+            }
+            transform *= Matrix4.CreateScale(this.scale);
+            transform *= Matrix4.CreateTranslation(this.localTranslate);
+            transform *= parentTransform;
+
+            // update rotation
+            a += 0.001f * frameDuration;
+            if (a > 2 * PI) a -= 2 * PI;
+
+            return transform;
+        }
+
         // initialization; called during first render
         public void Prepare(Shader shader)
         {
@@ -121,8 +137,9 @@ namespace Template_P3
             GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(quads.Length * Marshal.SizeOf(typeof(ObjQuad))), quads, BufferUsageHint.StaticDraw);
         }
 
-        public void AddChild(Mesh child)
+        public void AddChild(Mesh child, Texture texture)
         {
+            child.SetTexture(texture);
             this.children.Add(child);
         }
 
