@@ -3,6 +3,7 @@ using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
 using System;
+using template_P3;
 
 // minimal OpenTK rendering framework for UU/INFOGR
 // Jacco Bikker, 2016
@@ -42,11 +43,13 @@ class Game
 		// create the render target
 		target = new RenderTarget( screen.width, screen.height );
 		quad = new ScreenQuad();
-
+        
         int lightID = GL.GetUniformLocation(shader.programID, "lightPos");
         GL.UseProgram(shader.programID);
-        // Location of the lamp relative to the camera
-        GL.Uniform3(lightID, 0.0f, 10.0f, 10.0f);
+        // Ambient light
+        Light ambientLight = new Light(new Vector3(0, 10f, 10f), new Vector3(0.1f, 0f, 0f));
+        GL.Uniform3(lightID, ambientLight.position);
+        GL.Uniform3(shader.uniform_ambientLight, ambientLight.color);
     }
 
 	// tick for background surface

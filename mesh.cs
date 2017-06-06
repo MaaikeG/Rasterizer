@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using template_P3;
 
 namespace Template_P3 {
 
@@ -16,9 +17,6 @@ public class Mesh
 	int vertexBufferId;						// vertex buffer
 	int triangleBufferId;					// triangle buffer
 	int quadBufferId;                       // quad buffer
-
-    // Ambient light
-    Vector3 ambientLight = new Vector3(0.1f, 0f, 0f);
 
 	// constructor
 	public Mesh( string fileName )
@@ -66,7 +64,6 @@ public class Mesh
 		// pass transform to vertex shader
 		GL.UniformMatrix4( shader.uniform_mview, false, ref transform );
         GL.UniformMatrix4( shader.uniform_toWorld, false, ref toWorld );
-        GL.Uniform3(shader.uniform_ambientLight, ambientLight);
 
 		// bind interleaved vertex data
 		GL.EnableClientState( ArrayCap.VertexArray );
