@@ -1,0 +1,7 @@
+d:\Users\Maaike\Documents\Graphics\Rasterizer\bin\Debug\template_P3.exe.config
+d:\Users\Maaike\Documents\Graphics\Rasterizer\bin\Debug\template_P3.exe
+d:\Users\Maaike\Documents\Graphics\Rasterizer\bin\Debug\template_P3.pdb
+d:\Users\Maaike\Documents\Graphics\Rasterizer\bin\Debug\OpenTK.dll
+d:\Users\Maaike\Documents\Graphics\Rasterizer\obj\Debug\template_P3.csprojResolveAssemblyReference.cache
+d:\Users\Maaike\Documents\Graphics\Rasterizer\obj\Debug\template_P3.exe
+d:\Users\Maaike\Documents\Graphics\Rasterizer\obj\Debug\template_P3.pdb
