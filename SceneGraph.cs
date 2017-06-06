@@ -12,11 +12,11 @@ namespace template_P3
     {
         List<Mesh> children = new List<Mesh>();
 
-        public void Render(Shader shader, Matrix4 transform)
+        public void Render(Shader shader, Matrix4 transform, float frameDuration)
         {
             for (int i = 0; i < children.Count; i++)
             {
-                children[i].Render(shader, transform);
+                children[i].Render(shader, transform, frameDuration);
             }
         }
 
