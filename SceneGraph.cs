@@ -8,7 +8,7 @@ using Template_P3;
 
 namespace template_P3
 {
-    class SceneGraph
+    public class SceneGraph
     {
         List<Mesh> children = new List<Mesh>();
 

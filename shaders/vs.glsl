@@ -8,19 +8,23 @@ in vec3 vPosition;			// untransformed vertex position
 // shader output
 out vec4 normal;			// transformed vertex normal
 out vec4 worldPos;			// transformed world position
-out vec2 uv;				
+out vec2 uv;
+out vec3 position;
+out vec3 normal3;
 uniform mat4 transform;
 uniform mat4 toWorld;
  
 // vertex shader
 void main()
 {
-	// transform vertex using supplied matrix
-	gl_Position = transform * vec4(vPosition, 1.0);
+    // transform vertex using supplied matrix
+    gl_Position = transform * vec4(vPosition, 1.0);
 
-	worldPos = toWorld * vec4(vPosition, 1.0f);
+    worldPos = toWorld * vec4(vPosition, 1.0f);
 
-	// forward normal and uv coordinate; will be interpolated over triangle
-	normal = toWorld * vec4( vNormal, 0.0f );
-	uv = vUV;
+    // forward normal and uv coordinate; will be interpolated over triangle
+    normal = toWorld * vec4( vNormal, 0.0f );
+    uv = vUV;
+    position = vPosition;
+    normal3 = vNormal;
 }

@@ -2,7 +2,6 @@
 using System.Runtime.InteropServices;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
-using template_P3;
 using System.Collections.Generic;
 
 namespace Template_P3
@@ -47,7 +46,7 @@ namespace Template_P3
         public void Render(Shader shader, Matrix4 parentTransform, float frameDuration)
         {
             Matrix4 transform = GetLocalTransform(parentTransform, frameDuration);
-	    Matrix4 toWorld = Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), a);
+            Matrix4 toWorld = Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), 0);
 
             foreach (Mesh child in this.children)
             {
@@ -68,10 +67,8 @@ namespace Template_P3
 
             // pass transform to vertex shader
             GL.UniformMatrix4(shader.uniform_mview, false, ref transform);
-
-            // pass transform to vertex shader
-            GL.UniformMatrix4(shader.uniform_mview, false, ref transform);
             GL.UniformMatrix4(shader.uniform_toWorld, false, ref toWorld);
+            GL.UniformMatrix4(shader.uniform_camView, false, ref parentTransform);
 
             // bind interleaved vertex data
             GL.EnableClientState(ArrayCap.VertexArray);

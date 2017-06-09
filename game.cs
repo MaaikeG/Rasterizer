@@ -59,12 +59,17 @@ namespace Template_P3
             target = new RenderTarget(screen.width, screen.height);
             quad = new ScreenQuad();
 
-            int lightID = GL.GetUniformLocation(shader.programID, "lightPos");
             GL.UseProgram(shader.programID);
             // Ambient light
-            Light ambientLight = new Light(new Vector3(0, 10f, 10f), new Vector3(0.1f, 0f, 0f));
-            GL.Uniform3(lightID, ambientLight.position);
+            Light ambientLight = new Light(new Vector3(0, 0, 0), new Vector3(0.2f, 0.1f, 0.1f));
             GL.Uniform3(shader.uniform_ambientLight, ambientLight.color);
+            
+            // A bright lamp
+            int lightPosition = GL.GetUniformLocation(shader.programID, "lightPos");
+            int lightColor = GL.GetUniformLocation(shader.programID, "lightColor");
+            Light lamp = new Light(new Vector3(0, 10f, 10f), new Vector3(10f, 10f, 8f));
+            GL.Uniform3(lightPosition, lamp.position);
+            GL.Uniform3(lightColor, lamp.color);
         }
 
         // tick for background surface
