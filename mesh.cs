@@ -15,11 +15,13 @@ namespace Template_P3
         // data members
         public ObjVertex[] vertices;            // vertex positions, model space
         public ObjTriangle[] triangles;         // triangles (3 vertex indices)
-        public ObjQuad[] quads;                 // quads (4 vertex indices)
-
+        public ObjQuad[] quads;                 // quads (4 vertex indices)4
         public Texture texture;
 
-        public Vector3 localTranslate = new Vector3(0, 0, 0);
+        public Vector3 localRotate;
+        public Vector3 localTranslate;
+        internal float scale = 1;
+
         const float PI = 3.1415926535f;         // PI
         float a = 0;                            // teapot rotation angle
 
@@ -41,43 +43,12 @@ namespace Template_P3
             loader.Load(this, fileName);
         }
 
-        // initialization; called during first render
-        public void Prepare(Shader shader)
-        {
-            if (vertexBufferId != 0) return; // already taken care of
-
-            // generate interleaved vertex data (uv/normal/position (total 8 floats) per vertex)
-            GL.GenBuffers(1, out vertexBufferId);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBufferId);
-            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(vertices.Length * Marshal.SizeOf(typeof(ObjVertex))), vertices, BufferUsageHint.StaticDraw);
-
-            // generate triangle index array
-            GL.GenBuffers(1, out triangleBufferId);
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, triangleBufferId);
-            GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(triangles.Length * Marshal.SizeOf(typeof(ObjTriangle))), triangles, BufferUsageHint.StaticDraw);
-
-            // generate quad index array
-            GL.GenBuffers(1, out quadBufferId);
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, quadBufferId);
-            GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(quads.Length * Marshal.SizeOf(typeof(ObjQuad))), quads, BufferUsageHint.StaticDraw);
-        }
-
-        public void AddChild(Mesh child)
-        {
-            this.children.Add(child);
-        }
-
         // render the mesh using the supplied shader and matrix
         public void Render(Shader shader, Matrix4 parentTransform, float frameDuration)
         {
-            Matrix4 transform = Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), a);
-            Matrix4 toWorld = transform;
-            transform *= Matrix4.CreateTranslation(0, -4, -15);
-            transform *= parentTransform;
+            Matrix4 transform = GetLocalTransform(parentTransform, frameDuration);
+	    Matrix4 toWorld = Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), a);
 
-            // update rotation
-            a += 0.001f * frameDuration;
-            if (a > 2 * PI) a -= 2 * PI;
             foreach (Mesh child in this.children)
             {
                 child.Render(shader, transform, frameDuration);
@@ -132,6 +103,51 @@ namespace Template_P3
             GL.UseProgram(0);
         }
 
+        private Matrix4 GetLocalTransform(Matrix4 parentTransform, float frameDuration)
+        {
+            Matrix4 transform = Matrix4.Identity;
+            if (this.localRotate != new Vector3())
+            {
+                transform = Matrix4.CreateFromAxisAngle(this.localRotate, a);
+            }
+            transform *= Matrix4.CreateScale(this.scale);
+            transform *= Matrix4.CreateTranslation(this.localTranslate);
+            transform *= parentTransform;
+
+            // update rotation
+            a += 0.001f * frameDuration;
+            if (a > 2 * PI) a -= 2 * PI;
+
+            return transform;
+        }
+
+        // initialization; called during first render
+        public void Prepare(Shader shader)
+        {
+            if (vertexBufferId != 0) return; // already taken care of
+
+            // generate interleaved vertex data (uv/normal/position (total 8 floats) per vertex)
+            GL.GenBuffers(1, out vertexBufferId);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBufferId);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(vertices.Length * Marshal.SizeOf(typeof(ObjVertex))), vertices, BufferUsageHint.StaticDraw);
+
+            // generate triangle index array
+            GL.GenBuffers(1, out triangleBufferId);
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, triangleBufferId);
+            GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(triangles.Length * Marshal.SizeOf(typeof(ObjTriangle))), triangles, BufferUsageHint.StaticDraw);
+
+            // generate quad index array
+            GL.GenBuffers(1, out quadBufferId);
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, quadBufferId);
+            GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(quads.Length * Marshal.SizeOf(typeof(ObjQuad))), quads, BufferUsageHint.StaticDraw);
+        }
+
+        public void AddChild(Mesh child, Texture texture)
+        {
+            child.SetTexture(texture);
+            this.children.Add(child);
+        }
+
         // layout of a single vertex
         [StructLayout(LayoutKind.Sequential)]
         public struct ObjVertex
@@ -155,4 +171,5 @@ namespace Template_P3
             public int Index0, Index1, Index2, Index3;
         }
     }
-}
+
+} // namespace Template_P3
