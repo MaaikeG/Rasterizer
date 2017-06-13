@@ -15,18 +15,18 @@ namespace Template_P3
         // member variables
         public Surface screen;                  // background surface for printing etc.
         public SceneGraph scene;
+        public Camera cam;
         Stopwatch timer;                        // timer for measuring frame duration
         Shader shader;                          // shader to use for rendering
         Shader postproc;                        // shader to use for post processing
         RenderTarget target;                    // intermediate render target
         ScreenQuad quad;                        // screen filling quad for post processing
-
-        // prepare matrix for vertex shader
-        Matrix4 cameraPos = Matrix4.CreatePerspectiveFieldOfView(1.2f, 1.3f, .1f, 1000);
+        Matrix4 viewProjectMatrix;
 
         // initialize
         public void Init()
         {
+            cam = new Camera();
             // create shaders
             shader = new Shader("../../shaders/vs.glsl", "../../shaders/fs.glsl");
             postproc = new Shader("../../shaders/vs_post.glsl", "../../shaders/fs_post.glsl");
@@ -87,8 +87,10 @@ namespace Template_P3
             // enable render target
             target.Bind();
 
+            viewProjectMatrix = cam.GetViewMatrix() * Matrix4.CreatePerspectiveFieldOfView(1.2f, 1.3f, .1f, 1000);
+
             // render the scene
-            scene.Render(shader, cameraPos, frameDuration);
+            scene.Render(shader, viewProjectMatrix, frameDuration);
 
             // render quad
             target.Unbind();
@@ -97,8 +99,7 @@ namespace Template_P3
 
         public void Move(float x, float y, float z)
         {
-            Vector3 movement = new Vector3(x, y, z);
-            this.scene.world.localTranslate += movement;
+            cam.Move(x, y, z);
         }
     }
 
