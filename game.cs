@@ -51,9 +51,16 @@ namespace Template_P3
             };
 
             bigteapot.AddChild(babyTeapot);
-            scene.AddChild(bigteapot);
-            scene.AddChild(new Node() {mesh = new Mesh("../../assets/floor.obj") { texture = wood }, localTranslate = new Vector3(0, -4, -15) });
-            // initialize stopwatchx
+            Node world = new Node();
+
+            world.AddChild(new Node{
+                mesh = new Mesh("../../assets/floor.obj") { texture = wood },
+                localTranslate = new Vector3(0, -4, -15)
+            });
+            world.AddChild(bigteapot);
+            scene.world = world;
+
+            // initialize stopwatch
             timer = new Stopwatch();
             timer.Reset();
             timer.Start();
@@ -102,11 +109,10 @@ namespace Template_P3
             quad.Render(postproc, target.GetTextureID());
         }
 
-
-        public void MoveCamera(float x, float y, float z)
+        public void Move(float x, float y, float z)
         {
             Vector3 movement = new Vector3(x, y, z);
-            this.cameraPos *= Matrix4.CreateTranslation(movement);
+            this.scene.world.localTranslate += movement;
         }
     }
 

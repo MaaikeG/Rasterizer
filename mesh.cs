@@ -17,14 +17,8 @@ namespace Template_P3
         public ObjQuad[] quads;                 // quads (4 vertex indices)4
         public Texture texture;
 
-        public Vector3 localRotate;
-        public Vector3 localTranslate;
-        internal float scale = 1;
-
         const float PI = 3.1415926535f;         // PI
         float a = 0;                            // teapot rotation angle
-
-        List<Mesh> children = new List<Mesh>();
 
         int vertexBufferId;                     // vertex buffer
         int triangleBufferId;                   // triangle buffer
@@ -48,11 +42,6 @@ namespace Template_P3
         {
             Matrix4 transform = GetLocalTransform(parentTransform, frameDuration);
             Matrix4 toWorld = Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), 0);
-
-            foreach (Mesh child in this.children)
-            {
-                child.Render(shader, transform, frameDuration);
-            }
 
             // on first run, prepare buffers
             Prepare(shader);
