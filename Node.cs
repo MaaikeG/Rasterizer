@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OpenTK;
 using Template_P3;
 
@@ -36,8 +33,10 @@ namespace template_P3
 
         internal bool IsInViewFrustrum()
         {
-            Sphere s = GetBoundingSphere();
-            
+            if (mesh != null)
+            {
+                Sphere s = GetBoundingSphere();
+            }
             return true;
         }
 

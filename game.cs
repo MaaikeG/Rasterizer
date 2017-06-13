@@ -95,12 +95,10 @@ namespace Template_P3
             quad.Render(postproc, target.GetTextureID());
         }
 
-
-
         public void MoveCamera(float x, float y, float z)
         {
             Vector3 movement = new Vector3(x, y, z);
-            this.cameraPos *= Matrix4.CreateTranslation(movement);
+            this.scene.world.localTranslate += movement;
         }
     }
 
