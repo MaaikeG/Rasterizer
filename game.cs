@@ -9,7 +9,6 @@ using template_P3;
 
 namespace Template_P3
 {
-
     class Game
     {
         // member variables

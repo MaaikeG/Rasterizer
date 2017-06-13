@@ -6,7 +6,6 @@ using System.Collections.Generic;
 
 namespace Template_P3
 {
-
     // mesh and loader based on work by JTalton; http://www.opentk.com/node/642
 
     public class Mesh
@@ -49,11 +48,6 @@ namespace Template_P3
             // update rotation
             a += 0.001f * frameDuration;
             if (a > 2 * PI) a -= 2 * PI;
-
-            foreach (Mesh child in this.children)
-            {
-                child.Render(shader, transform, frameDuration);
-            }
 
             // on first run, prepare buffers
             Prepare(shader);
