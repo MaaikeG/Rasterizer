@@ -2,14 +2,13 @@
 
 namespace template_P3
 {
-    class Light
+    class Light : Node
     {
-        public Vector3 position;
         public Vector3 color;
 
         public Light(Vector3 position, Vector3 color)
         {
-            this.position = position;
+            localTranslate = position;
             this.color = color;
         }
     }

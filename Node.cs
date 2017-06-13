@@ -47,7 +47,6 @@ namespace template_P3
                 if (vertex.Vertex.Z > maxZ) maxZ = vertex.Vertex.Z;
             }
             return true;
-//throw new NotImplementedException();
         }
 
 

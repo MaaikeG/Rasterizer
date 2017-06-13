@@ -53,7 +53,7 @@ namespace Template_P3
             bigteapot.AddChild(babyTeapot);
             scene.AddChild(bigteapot);
             scene.AddChild(new Node() {mesh = new Mesh("../../assets/floor.obj") { texture = wood }, localTranslate = new Vector3(0, -4, -15) });
-            // initialize stopwatch
+            // initialize stopwatchx
             timer = new Stopwatch();
             timer.Reset();
             timer.Start();
@@ -71,8 +71,9 @@ namespace Template_P3
             int lightPosition = GL.GetUniformLocation(shader.programID, "lightPos");
             int lightColor = GL.GetUniformLocation(shader.programID, "lightColor");
             Light lamp = new Light(new Vector3(0, 10f, 10f), new Vector3(10f, 10f, 8f));
-            GL.Uniform3(lightPosition, lamp.position);
+            GL.Uniform3(lightPosition, lamp.localTranslate);
             GL.Uniform3(lightColor, lamp.color);
+            scene.AddChild(lamp);
         }
 
         // tick for background surface

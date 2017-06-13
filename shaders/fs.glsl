@@ -4,7 +4,6 @@
 in vec2 uv;						// interpolated texture coordinates
 in vec4 normal;					// interpolated normal
 in vec4 worldPos;               // transformed world position
-in vec3 position;
 in vec3 normal3;
 
 // uniform variables
@@ -30,10 +29,10 @@ void main()
     vec3 materialColor = texture( pixels, uv ).xyz;
     float attenuation = 1.0f / (dist * dist);
     outputColor = outputColor + vec4( materialColor * max( 0.0f, dot( lightVector, normal.xyz ) ) * attenuation * lightColor, 1 );
-
+    
     // Specular lighting
     vec3 reflectionVector = normalize(reflect(-lightVector, normal.xyz));
-    vec3 viewVector = normalize(vec3(inverse(camView) * vec4(0,0,0,1)) - position);
+    vec3 viewVector = normalize(vec3(inverse(camView) * vec4(0,0,0,1)) - worldPos.xyz);
     float specularExponent = 20;
     float specularIntensity = 0.2;
     float specularReflection = max(dot(normal3, lightVector), 0.0) * pow(max(dot(reflectionVector, viewVector), 0.0), specularExponent);
