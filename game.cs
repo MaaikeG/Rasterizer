@@ -20,7 +20,7 @@ namespace Template_P3
         Shader postproc;                        // shader to use for post processing
         RenderTarget target;                    // intermediate render target
         ScreenQuad quad;                        // screen filling quad for post processing
-        
+
         // prepare matrix for vertex shader
         Matrix4 cameraPos = Matrix4.CreatePerspectiveFieldOfView(1.2f, 1.3f, .1f, 1000);
 
@@ -33,23 +33,26 @@ namespace Template_P3
             // load a texture
             Texture wood = new Texture("../../assets/wood.jpg");
             // create the render target
+            Mesh teapot = new Mesh("../../assets/teapot.obj") { texture = wood };
 
             scene = new SceneGraph();
-            Mesh teapot = new Mesh("../../assets/teapot.obj")
+            Node bigteapot = new Node()
             {
+                mesh = teapot,
                 localTranslate = new Vector3(0, -4, -15),
                 localRotate = new Vector3(0, 1, 0)
             };
 
-            Mesh babyTeapot = new Mesh("../../assets/teapot.obj") {
+            Node babyTeapot = new Node() {
+                mesh = teapot,
                 localTranslate = new Vector3(-5, 2, -7),
                 scale = 0.3f,
                 localRotate = new Vector3(0, 1, 0)
             };
 
-            teapot.AddChild(babyTeapot, wood);
-            scene.AddChild(teapot, wood);
-            scene.AddChild(new Mesh("../../assets/floor.obj") { localTranslate = new Vector3(0, -4, -15) }, wood);
+            bigteapot.AddChild(babyTeapot);
+            scene.AddChild(bigteapot);
+            scene.AddChild(new Node() {mesh = new Mesh("../../assets/floor.obj") { texture = wood }, localTranslate = new Vector3(0, -4, -15) });
             // initialize stopwatch
             timer = new Stopwatch();
             timer.Reset();
@@ -86,7 +89,7 @@ namespace Template_P3
         }
 
 
-        
+
         public void MoveCamera(float x, float y, float z)
         {
             Vector3 movement = new Vector3(x, y, z);

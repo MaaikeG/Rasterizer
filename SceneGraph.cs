@@ -10,7 +10,7 @@ namespace template_P3
 {
     class SceneGraph
     {
-        List<Mesh> children = new List<Mesh>();
+        List<Node> children = new List<Node>();
 
         public void Render(Shader shader, Matrix4 transform, float frameDuration)
         {
@@ -20,10 +20,9 @@ namespace template_P3
             }
         }
 
-        internal void AddChild(Mesh mesh, Texture texture)
+        internal void AddChild(Node node)
         {
-            mesh.SetTexture(texture);
-            children.Add(mesh);
+            children.Add(node);
         }
     }
 }
