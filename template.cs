@@ -35,16 +35,16 @@ namespace Template_P3
             switch(e.KeyChar)
             {
                 case 'w':
-                    game.MoveCamera(0, 0.1f, 0);
+                    game.Move(0, 0.1f, 0);
                     break;
                 case 's':
-                    game.MoveCamera(0, -0.1f, 0);
+                    game.Move(0, -0.1f, 0);
                     break;
                 case 'a':
-                    game.MoveCamera(-0.1f, 0, 0);
+                    game.Move(-0.1f, 0, 0);
                     break;
                 case 'd':
-                    game.MoveCamera(0.1f, 0, 0);
+                    game.Move(0.1f, 0, 0);
                     break;
             }
         }
