@@ -40,7 +40,6 @@ namespace Template_P3
         // render the mesh using the supplied shader and matrix
         public void Render(Shader shader, Matrix4 parentTransform, float frameDuration)
         {
-            Matrix4 transform = GetLocalTransform(parentTransform, frameDuration);
             Matrix4 toWorld = Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), 0);
 
             // on first run, prepare buffers
@@ -56,7 +55,7 @@ namespace Template_P3
             GL.UseProgram(shader.programID);
 
             // pass transform to vertex shader
-            GL.UniformMatrix4(shader.uniform_mview, false, ref transform);
+            GL.UniformMatrix4(shader.uniform_mview, false, ref parentTransform);
             GL.UniformMatrix4(shader.uniform_toWorld, false, ref toWorld);
             GL.UniformMatrix4(shader.uniform_camView, false, ref parentTransform);
 
@@ -90,24 +89,6 @@ namespace Template_P3
             GL.UseProgram(0);
         }
 
-        private Matrix4 GetLocalTransform(Matrix4 parentTransform, float frameDuration)
-        {
-            Matrix4 transform = Matrix4.Identity;
-            if (this.localRotate != new Vector3())
-            {
-                transform = Matrix4.CreateFromAxisAngle(this.localRotate, a);
-            }
-            transform *= Matrix4.CreateScale(this.scale);
-            transform *= Matrix4.CreateTranslation(this.localTranslate);
-            transform *= parentTransform;
-
-            // update rotation
-            a += 0.001f * frameDuration;
-            if (a > 2 * PI) a -= 2 * PI;
-
-            return transform;
-        }
-
         // initialization; called during first render
         public void Prepare(Shader shader)
         {
@@ -127,12 +108,6 @@ namespace Template_P3
             GL.GenBuffers(1, out quadBufferId);
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, quadBufferId);
             GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(quads.Length * Marshal.SizeOf(typeof(ObjQuad))), quads, BufferUsageHint.StaticDraw);
-        }
-
-        public void AddChild(Mesh child, Texture texture)
-        {
-            child.SetTexture(texture);
-            this.children.Add(child);
         }
 
         // layout of a single vertex

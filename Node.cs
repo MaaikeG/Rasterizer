@@ -5,7 +5,7 @@ using Template_P3;
 
 namespace template_P3
 {
-    class Node
+    public class Node
     {
         public Mesh mesh;
         public Vector3 localRotate;

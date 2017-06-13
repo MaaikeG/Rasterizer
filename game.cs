@@ -80,7 +80,7 @@ namespace Template_P3
             Light lamp = new Light(new Vector3(0, 10f, 10f), new Vector3(10f, 10f, 8f));
             GL.Uniform3(lightPosition, lamp.localTranslate);
             GL.Uniform3(lightColor, lamp.color);
-            scene.AddChild(lamp);
+            world.AddChild(lamp);
         }
 
         // tick for background surface
