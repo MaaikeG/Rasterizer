@@ -24,12 +24,6 @@ namespace Template_P3
         int triangleBufferId;                   // triangle buffer
         int quadBufferId;                       // quad buffer
 
-
-        internal void SetTexture(Texture texture)
-        {
-            this.texture = texture;
-        }
-
         // constructor
         public Mesh(string fileName)
         {

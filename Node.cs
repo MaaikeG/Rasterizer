@@ -25,7 +25,7 @@ namespace template_P3
             if (this.IsInViewFrustrum())
             {
                 Matrix4 transform = GetLocalTransform(parentTransform, frameDuration);
-                this.mesh.Render(shader, transform, frameDuration);
+                if (this.mesh != null) this.mesh.Render(shader, transform, frameDuration);
 
                 foreach (Node child in this.children)
                 {
@@ -36,20 +36,33 @@ namespace template_P3
 
         internal bool IsInViewFrustrum()
         {
-            float minX= 0, maxX = 0 , minY = 0, maxY = 0, minZ = 0, maxZ = 0;
-            foreach(var vertex in mesh.vertices)
-            {
-                if (vertex.Vertex.X < minX) minX = vertex.Vertex.X;
-                if (vertex.Vertex.X > maxX) maxX = vertex.Vertex.X;
-                if (vertex.Vertex.Y < minY) minY = vertex.Vertex.Y;
-                if (vertex.Vertex.Y > maxY) maxY = vertex.Vertex.Y;
-                if (vertex.Vertex.Z < minZ) minZ = vertex.Vertex.Z;
-                if (vertex.Vertex.Z > maxZ) maxZ = vertex.Vertex.Z;
-            }
+            Sphere s = GetBoundingSphere();
+            
             return true;
-//throw new NotImplementedException();
         }
 
+        private Sphere GetBoundingSphere()
+        {
+            Vector3 o = new Vector3(); // Average of all vectors in mesh is the sphere origin
+            foreach (var vertex in mesh.vertices)
+            {
+                o += vertex.Vertex;
+            }
+            Vector3.Divide(o, mesh.vertices.Length);
+
+            // Get largest disdance from center
+            float r2 = 0;
+            float dis = 0;
+            foreach (var vertex in mesh.vertices)
+            {
+                dis = (vertex.Vertex.X - o.X) * (vertex.Vertex.X - o.X)
+                    + (vertex.Vertex.Y - o.Y) * (vertex.Vertex.Y - o.Y)
+                    + (vertex.Vertex.Z - o.Z) * (vertex.Vertex.Z - o.Z);
+                if (dis > r2) r2 = dis;
+            }
+
+            return new Sphere(o, (float)Math.Sqrt(r2));
+        }
 
         private Matrix4 GetLocalTransform(Matrix4 parentTransform, float frameDuration)
         {

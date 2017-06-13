@@ -51,8 +51,15 @@ namespace Template_P3
             };
 
             bigteapot.AddChild(babyTeapot);
-            scene.AddChild(bigteapot);
-            scene.AddChild(new Node() {mesh = new Mesh("../../assets/floor.obj") { texture = wood }, localTranslate = new Vector3(0, -4, -15) });
+            Node world = new Node();
+
+            world.AddChild(new Node{
+                mesh = new Mesh("../../assets/floor.obj") { texture = wood },
+                localTranslate = new Vector3(0, -4, -15)
+            });
+            world.AddChild(bigteapot);
+            scene.world = world;
+
             // initialize stopwatch
             timer = new Stopwatch();
             timer.Reset();
