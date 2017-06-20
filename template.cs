@@ -13,6 +13,7 @@ namespace Template_P3
         static int screenID;
         static Game game;
         static bool terminated = false;
+        private Vector2 lastMousePos = Vector2.Zero;
 
         protected override void OnLoad(EventArgs e)
         {
@@ -22,6 +23,7 @@ namespace Template_P3
             GL.Disable(EnableCap.DepthTest);
             GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
             ClientSize = new Size(640, 400);
+            CursorVisible = false;
             game = new Game();
             game.screen = new Surface(Width, Height);
             Sprite.target = game.screen;
@@ -32,7 +34,7 @@ namespace Template_P3
 
         private void handleKeyPress(object sender, KeyPressEventArgs e)
         {
-            switch(e.KeyChar)
+            switch (e.KeyChar)
             {
                 case 'w':
                     game.Move(0, 0.1f, 0);
@@ -45,6 +47,12 @@ namespace Template_P3
                     break;
                 case 'd':
                     game.Move(0.1f, 0, 0);
+                    break;
+                case 'e':
+                    game.Move(0, 0, 0.1f);
+                    break;
+                case 'q':
+                    game.Move(0, 0, -0.1f);
                     break;
             }
         }
@@ -67,7 +75,21 @@ namespace Template_P3
             // called once per frame; app logic
             var keyboard = OpenTK.Input.Keyboard.GetState();
             if (keyboard[OpenTK.Input.Key.Escape]) this.Exit();
+            if (Focused)
+            {
+                Vector2 delta = lastMousePos - new Vector2(OpenTK.Input.Mouse.GetState().X, OpenTK.Input.Mouse.GetState().Y);
+
+                game.cam.AddRotation(delta.X, delta.Y);
+                ResetCursor();
+            }
         }
+
+        private void ResetCursor()
+        {
+            OpenTK.Input.Mouse.SetPosition(Bounds.Left + Bounds.Width / 2, Bounds.Top + Bounds.Height / 2);
+            lastMousePos = new Vector2(OpenTK.Input.Mouse.GetState().X, OpenTK.Input.Mouse.GetState().Y);
+        }
+
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             // called once per frame; render
@@ -108,6 +130,13 @@ namespace Template_P3
             // swap buffers
             SwapBuffers();
         }
+
+        protected override void OnFocusedChanged(EventArgs e)
+        {
+            base.OnFocusedChanged(e);
+            if (Focused) ResetCursor();
+        }
+
         public static void Main(string[] args)
         {
             // entry point
