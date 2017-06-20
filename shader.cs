@@ -14,7 +14,7 @@ public class Shader
 	public int uniform_mview;
 
 	// constructor
-	public Shader( String vertexShader, String fragmentShader )
+	public Shader(string vertexShader, string fragmentShader )
 	{
 		// compile shaders
 		programID = GL.CreateProgram();
@@ -31,7 +31,7 @@ public class Shader
 	}
 
 	// loading shaders
-	void Load( String filename, ShaderType type, int program, out int ID )
+	void Load(string filename, ShaderType type, int program, out int ID )
 	{
 		// source: http://neokabuto.blogspot.nl/2013/03/opentk-tutorial-2-drawing-triangle.html
 		ID = GL.CreateShader( type );
