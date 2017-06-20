@@ -11,7 +11,7 @@ uniform sampler2D pixels;		// texture sampler
 uniform vec3 ambientLight;      // ambient light color
 uniform vec3 lightColor;        // light color
 uniform vec3 lightPos;          // light position
-uniform mat4 camView;           // camera matrix
+uniform mat4 transform;         // camera matrix
 
 // shader output
 out vec4 outputColor;
@@ -32,7 +32,7 @@ void main()
     
     // Specular lighting
     vec3 reflectionVector = normalize(reflect(-lightVector, normal.xyz));
-    vec3 viewVector = normalize(vec3(inverse(camView) * vec4(0,0,0,1)) - worldPos.xyz);
+    vec3 viewVector = normalize(vec3(inverse(transform) * vec4(0,0,0,1)) - worldPos.xyz);
     float specularExponent = 20;
     float specularIntensity = 0.2;
     float specularReflection = max(dot(normal3, lightVector), 0.0) * pow(max(dot(reflectionVector, viewVector), 0.0), specularExponent);

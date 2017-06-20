@@ -71,11 +71,10 @@ namespace Template_P3
 
             GL.UseProgram(shader.programID);
             // Ambient light
-            Light ambientLight = new Light(new Vector3(0, 0, 0), new Vector3(0.2f, 0.1f, 0.1f));
-            GL.Uniform3(shader.uniform_ambientLight, ambientLight.color);
+            GL.Uniform3(shader.uniform_ambientLight, new Vector3(0.2f, 0.1f, 0.1f));
             
             // A bright lamp
-            Light lamp = new Light(new Vector3(0, 2f, -10f), new Vector3(10f, 10f, 8f));
+            Light lamp = new Light(new Vector3(0, 2f, 10f), new Vector3(10f, 10f, 8f));
             GL.Uniform3(shader.lightPosition, lamp.localTranslate);
             GL.Uniform3(shader.lightColor, lamp.color);
             world.AddChild(lamp);

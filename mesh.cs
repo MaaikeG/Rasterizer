@@ -39,10 +39,8 @@ namespace Template_P3
         }
 
         // render the mesh using the supplied shader and matrix
-        public void Render(Shader shader, Matrix4 parentTransform, float frameDuration)
+        public void Render(Shader shader, Matrix4 parentTransform, Matrix4 toWorld)
         {
-            Matrix4 toWorld = Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), 0);
-
             // on first run, prepare buffers
             Prepare(shader);
 
@@ -58,7 +56,6 @@ namespace Template_P3
             // pass transform to vertex shader
             GL.UniformMatrix4(shader.uniform_mview, false, ref parentTransform);
             GL.UniformMatrix4(shader.uniform_toWorld, false, ref toWorld);
-            GL.UniformMatrix4(shader.uniform_camView, false, ref parentTransform);
 
             // bind interleaved vertex data
             GL.EnableClientState(ArrayCap.VertexArray);

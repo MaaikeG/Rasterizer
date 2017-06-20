@@ -11,6 +11,7 @@ namespace template_P3
         public Vector3 localRotate;
         public Vector3 localTranslate;
         internal float scale = 1;
+        Matrix4 toWorld;
 
         List<Node> children = new List<Node>();
         private float a;
@@ -22,7 +23,7 @@ namespace template_P3
             if (this.IsInViewFrustrum())
             {
                 Matrix4 transform = GetLocalTransform(parentTransform, frameDuration);
-                if (this.mesh != null) this.mesh.Render(shader, transform, frameDuration);
+                if (this.mesh != null) this.mesh.Render(shader, transform, toWorld);
 
                 foreach (Node child in this.children)
                 {
@@ -70,6 +71,7 @@ namespace template_P3
             {
                 transform = Matrix4.CreateFromAxisAngle(this.localRotate, a);
             }
+            toWorld = transform;
             transform *= Matrix4.CreateScale(this.scale);
             transform *= Matrix4.CreateTranslation(this.localTranslate);
             transform *= parentTransform;

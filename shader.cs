@@ -14,7 +14,6 @@ namespace Template_P3 {
         public int uniform_mview;
         public int uniform_toWorld;
         public int uniform_ambientLight;
-        public int uniform_camView;
 
         public int lightPosition;
         public int lightColor;
@@ -36,7 +35,6 @@ namespace Template_P3 {
             uniform_mview = GL.GetUniformLocation( programID, "transform" );
             uniform_toWorld = GL.GetUniformLocation(programID, "toWorld");
             uniform_ambientLight = GL.GetUniformLocation(programID, "ambientLight");
-            uniform_camView = GL.GetUniformLocation(programID, "camView");
             lightPosition = GL.GetUniformLocation(programID, "lightPos");
             lightColor = GL.GetUniformLocation(programID, "lightColor");
         }
