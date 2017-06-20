@@ -75,11 +75,9 @@ namespace Template_P3
             GL.Uniform3(shader.uniform_ambientLight, ambientLight.color);
             
             // A bright lamp
-            int lightPosition = GL.GetUniformLocation(shader.programID, "lightPos");
-            int lightColor = GL.GetUniformLocation(shader.programID, "lightColor");
-            Light lamp = new Light(new Vector3(0, 10f, 10f), new Vector3(10f, 10f, 8f));
-            GL.Uniform3(lightPosition, lamp.localTranslate);
-            GL.Uniform3(lightColor, lamp.color);
+            Light lamp = new Light(new Vector3(0, 2f, -10f), new Vector3(10f, 10f, 8f));
+            GL.Uniform3(shader.lightPosition, lamp.localTranslate);
+            GL.Uniform3(shader.lightColor, lamp.color);
             world.AddChild(lamp);
         }
 
