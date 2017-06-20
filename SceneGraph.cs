@@ -11,5 +11,8 @@ namespace template_P3
         {
             world.Render(shader, transform, frameDuration);
         }
+
+        private void GetViewBoundingBox (Matrix4 camera) {
+        }
     }
 }
