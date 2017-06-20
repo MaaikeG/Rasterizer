@@ -17,25 +17,28 @@ namespace template_P3
 
         public int PI { get; private set; }
 
-        internal void Render(Shader shader, Matrix4 parentTransform, float frameDuration)
+        internal void Render(Shader shader, Matrix4 parentTransform, Plane[] bb, float frameDuration)
         {
-            if (this.IsInViewFrustrum())
-            {
-                Matrix4 transform = GetLocalTransform(parentTransform, frameDuration);
-                if (this.mesh != null) this.mesh.Render(shader, transform, frameDuration);
+            Matrix4 transform = GetLocalTransform(parentTransform, frameDuration);
+            if (this.mesh != null && this.IsInViewFrustrum(bb, transform)) this.mesh.Render(shader, transform, frameDuration);
 
-                foreach (Node child in this.children)
-                {
-                    child.Render(shader, transform, frameDuration);
-                }
+            foreach (Node child in this.children)
+            {
+                child.Render(shader, transform, bb, frameDuration);
             }
         }
 
-        internal bool IsInViewFrustrum()
+        internal bool IsInViewFrustrum(Plane[] bb, Matrix4 transform)
         {
             if (mesh != null)
             {
                 Sphere s = GetBoundingSphere();
+                s.origin = Vector3.Transform(s.origin, transform);
+                for (int i = 0; i < 6; i++)
+                {
+                    if (Vector3.Dot(s.origin, bb[i].normal) + bb[i].d > s.r)
+                        return false;
+                }
             }
             return true;
         }

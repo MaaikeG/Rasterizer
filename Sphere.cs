@@ -2,7 +2,7 @@
 
 namespace template_P3
 {
-    internal class Sphere
+    public class Sphere
     {
         public Vector3 origin;
         public float r;
