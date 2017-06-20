@@ -15,28 +15,51 @@ namespace Template_P3
         // member variables
         public Surface screen;                  // background surface for printing etc.
         public SceneGraph scene;
+        public Camera cam;
         Stopwatch timer;                        // timer for measuring frame duration
         Shader shader;                          // shader to use for rendering
         Shader postproc;                        // shader to use for post processing
         RenderTarget target;                    // intermediate render target
         ScreenQuad quad;                        // screen filling quad for post processing
-        
-        // prepare matrix for vertex shader
-        Matrix4 cameraPos = Matrix4.CreatePerspectiveFieldOfView(1.2f, 1.3f, .1f, 1000);
+        Matrix4 viewProjectMatrix;
 
         // initialize
         public void Init()
         {
+            cam = new Camera();
             // create shaders
             shader = new Shader("../../shaders/vs.glsl", "../../shaders/fs.glsl");
             postproc = new Shader("../../shaders/vs_post.glsl", "../../shaders/fs_post.glsl");
             // load a texture
             Texture wood = new Texture("../../assets/wood.jpg");
             // create the render target
+            Mesh teapot = new Mesh("../../assets/teapot.obj") { texture = wood };
 
             scene = new SceneGraph();
-            scene.AddChild(new Mesh("../../assets/teapot.obj") { localTranslate = new Vector3(0.1f, 0, 0) }, wood);
-            scene.AddChild(new Mesh("../../assets/floor.obj") { localTranslate = new Vector3(-0.1f, 0, 0) }, wood);
+            Node bigteapot = new Node()
+            {
+                mesh = teapot,
+                localTranslate = new Vector3(0, -4, -15),
+                localRotate = new Vector3(0, 1, 0)
+            };
+
+            Node babyTeapot = new Node() {
+                mesh = teapot,
+                localTranslate = new Vector3(-5, 2, -7),
+                scale = 0.3f,
+                localRotate = new Vector3(0, 1, 0)
+            };
+
+            bigteapot.AddChild(babyTeapot);
+            Node world = new Node();
+
+            world.AddChild(new Node{
+                mesh = new Mesh("../../assets/floor.obj") { texture = wood },
+                localTranslate = new Vector3(0, -4, -15)
+            });
+            world.AddChild(bigteapot);
+            scene.world = world;
+
             // initialize stopwatch
             timer = new Stopwatch();
             timer.Reset();
@@ -64,20 +87,19 @@ namespace Template_P3
             // enable render target
             target.Bind();
 
+            viewProjectMatrix = cam.GetViewMatrix() * Matrix4.CreatePerspectiveFieldOfView(1.2f, 1.3f, .1f, 1000);
+
             // render the scene
-            scene.Render(shader, cameraPos, frameDuration);
+            scene.Render(shader, viewProjectMatrix, frameDuration);
 
             // render quad
             target.Unbind();
             quad.Render(postproc, target.GetTextureID());
         }
 
-
-        
-        public void MoveCamera(float x, float y, float z)
+        public void Move(float x, float y, float z)
         {
-            Vector3 movement = new Vector3(x, y, z);
-            this.cameraPos *= Matrix4.CreateTranslation(movement);
+            cam.Move(x, y, z);
         }
     }
 

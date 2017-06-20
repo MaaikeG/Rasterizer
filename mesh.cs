@@ -17,20 +17,12 @@ namespace Template_P3
         public ObjQuad[] quads;                 // quads (4 vertex indices)4
         public Texture texture;
 
-        public Vector3 localTranslate = new Vector3(0, 0, 0);
         const float PI = 3.1415926535f;         // PI
         float a = 0;                            // teapot rotation angle
-
-        List<Mesh> children = new List<Mesh>();
 
         int vertexBufferId;                     // vertex buffer
         int triangleBufferId;                   // triangle buffer
         int quadBufferId;                       // quad buffer
-
-        internal void SetTexture(Texture texture)
-        {
-            this.texture = texture;
-        }
 
         // constructor
         public Mesh(string fileName)
@@ -40,21 +32,8 @@ namespace Template_P3
         }
 
         // render the mesh using the supplied shader and matrix
-        public void Render(Shader shader, Matrix4 parentTransform, float frameDuration)
+        public void Render(Shader shader, Matrix4 transform, float frameDuration)
         {
-            Matrix4 transform = Matrix4.CreateFromAxisAngle(new Vector3(0, 1, 0), a);
-            transform *= Matrix4.CreateTranslation(0, -4, -15);
-            transform *= parentTransform;
-
-            // update rotation
-            a += 0.001f * frameDuration;
-            if (a > 2 * PI) a -= 2 * PI;
-
-            foreach (Mesh child in this.children)
-            {
-                child.Render(shader, transform, frameDuration);
-            }
-
             // on first run, prepare buffers
             Prepare(shader);
 
@@ -119,11 +98,6 @@ namespace Template_P3
             GL.GenBuffers(1, out quadBufferId);
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, quadBufferId);
             GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(quads.Length * Marshal.SizeOf(typeof(ObjQuad))), quads, BufferUsageHint.StaticDraw);
-        }
-
-        public void AddChild(Mesh child)
-        {
-            this.children.Add(child);
         }
 
         // layout of a single vertex
