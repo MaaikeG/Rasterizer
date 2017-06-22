@@ -1,7 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using OpenTK;
-using OpenTK.Graphics;
-using OpenTK.Graphics.OpenGL;
 using template_P3;
 
 // minimal OpenTK rendering framework for UU/INFOGR
@@ -22,6 +21,7 @@ namespace Template_P3
         RenderTarget target;                    // intermediate render target
         ScreenQuad quad;                        // screen filling quad for post processing
         Matrix4 viewProjectMatrix;
+        Texture3d colorCube;
 
         // initialize
         public void Init()
@@ -30,6 +30,9 @@ namespace Template_P3
             // create shaders
             shader = new Shader("../../shaders/vs.glsl", "../../shaders/fs.glsl");
             postproc = new Shader("../../shaders/vs_post.glsl", "../../shaders/fs_post.glsl");
+
+            colorCube = new Texture3d("../../assets/ColorLookupTexture.jpg");
+
             // load a texture
             Texture wood = new Texture("../../assets/wood.jpg");
             // create the render target
@@ -94,7 +97,7 @@ namespace Template_P3
 
             // render quad
             target.Unbind();
-            quad.Render(postproc, target.GetTextureID());
+            quad.Render(postproc, target.GetTextureID(), colorCube.id);
         }
 
         public void Move(float x, float y, float z)
