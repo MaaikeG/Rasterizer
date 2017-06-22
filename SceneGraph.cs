@@ -9,7 +9,7 @@ namespace template_P3
 
         public void Render(Shader shader, Matrix4 transform, float frameDuration)
         {
-            world.Render(shader, transform, frameDuration);
+            world.Render(shader, transform, Matrix4.Identity, frameDuration);
         }
     }
 }

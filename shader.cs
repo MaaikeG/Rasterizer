@@ -17,6 +17,7 @@ namespace Template_P3 {
 
         public int lightPosition;
         public int lightColor;
+        public int camPosition;
 
         // constructor
         public Shader( String vertexShader, String fragmentShader )
@@ -37,6 +38,7 @@ namespace Template_P3 {
             uniform_ambientLight = GL.GetUniformLocation(programID, "ambientLight");
             lightPosition = GL.GetUniformLocation(programID, "lightPos");
             lightColor = GL.GetUniformLocation(programID, "lightColor");
+            camPosition = GL.GetUniformLocation(programID, "cameraPosition");
         }
 
         // loading shaders

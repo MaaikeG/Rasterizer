@@ -11,23 +11,24 @@ namespace template_P3
         public Vector3 localRotate;
         public Vector3 localTranslate;
         internal float scale = 1;
-        Matrix4 toWorld;
 
         List<Node> children = new List<Node>();
         private float a;
 
         public int PI { get; private set; }
 
-        internal void Render(Shader shader, Matrix4 parentTransform, float frameDuration)
+        internal void Render(Shader shader, Matrix4 parentTransform, Matrix4 world, float frameDuration)
         {
-            if (this.IsInViewFrustrum())
+            if (IsInViewFrustrum())
             {
-                Matrix4 transform = GetLocalTransform(parentTransform, frameDuration);
-                if (this.mesh != null) this.mesh.Render(shader, transform, toWorld);
+                Matrix4 transform = GetLocalTransform(world, parentTransform, frameDuration);
+                world = transform * world;
+                transform *= parentTransform;
+                if (mesh != null) mesh.Render(shader, transform, world);
 
-                foreach (Node child in this.children)
+                foreach (Node child in children)
                 {
-                    child.Render(shader, transform, frameDuration);
+                    child.Render(shader, transform, world, frameDuration);
                 }
             }
         }
@@ -64,17 +65,16 @@ namespace template_P3
             return new Sphere(o, (float)Math.Sqrt(r2));
         }
 
-        private Matrix4 GetLocalTransform(Matrix4 parentTransform, float frameDuration)
+        private Matrix4 GetLocalTransform(Matrix4 world, Matrix4 parentTransform, float frameDuration)
         {
             Matrix4 transform = Matrix4.Identity;
-            if (this.localRotate != new Vector3())
+       
+            if (localRotate != Vector3.Zero)
             {
-                transform = Matrix4.CreateFromAxisAngle(this.localRotate, a);
+                transform = Matrix4.CreateFromAxisAngle(localRotate, a);
             }
-            toWorld = transform;
-            transform *= Matrix4.CreateScale(this.scale);
-            transform *= Matrix4.CreateTranslation(this.localTranslate);
-            transform *= parentTransform;
+            transform *= Matrix4.CreateScale(scale);
+            transform *= Matrix4.CreateTranslation(localTranslate);
 
             // update rotation
             a += 0.001f * frameDuration;
@@ -85,7 +85,7 @@ namespace template_P3
 
         internal void AddChild(Node node)
         {
-            this.children.Add(node);
+            children.Add(node);
         }
     }
 }
