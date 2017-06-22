@@ -12,7 +12,7 @@ namespace Template_P3
     {
         static int screenID;
         static Game game;
-        static bool terminated = false;
+        static bool terminated = false, mouseControl = false;
         private Vector2 lastMousePos = Vector2.Zero;
 
         protected override void OnLoad(EventArgs e)
@@ -23,7 +23,7 @@ namespace Template_P3
             GL.Disable(EnableCap.DepthTest);
             GL.Hint(HintTarget.PerspectiveCorrectionHint, HintMode.Nicest);
             ClientSize = new Size(640, 400);
-            CursorVisible = false;
+            CursorVisible = true;
             game = new Game();
             game.screen = new Surface(Width, Height);
             Sprite.target = game.screen;
@@ -54,6 +54,10 @@ namespace Template_P3
                 case 'q':
                     game.Move(0, 0, -0.1f);
                     break;
+                case 'm':
+                    mouseControl = !mouseControl;
+                    CursorVisible = !CursorVisible;
+                    break;
             }
         }
         protected override void OnUnload(EventArgs e)
@@ -77,10 +81,12 @@ namespace Template_P3
             if (keyboard[OpenTK.Input.Key.Escape]) this.Exit();
             if (Focused)
             {
-                Vector2 delta = lastMousePos - new Vector2(OpenTK.Input.Mouse.GetState().X, OpenTK.Input.Mouse.GetState().Y);
-
-                game.cam.AddRotation(delta.X, delta.Y);
-                ResetCursor();
+                if (mouseControl)
+                {
+                    Vector2 delta = lastMousePos - new Vector2(OpenTK.Input.Mouse.GetState().X, OpenTK.Input.Mouse.GetState().Y);
+                    game.cam.AddRotation(delta.X, delta.Y);
+                    ResetCursor();
+                }
             }
         }
 
