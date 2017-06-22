@@ -32,6 +32,7 @@ void main()
 	float vignette = smoothstep(RADIUS, SOFTNESS, distance);
 	outputColor = mix(outputColor.rgb, outputColor.rgb * vignette, 0.5);
 	
+	// Now get appropriate color from color cube.
 	const vec3 offset = vec3(1.0 / (2.0 * 16));
 	outputColor = mix(outputColor.rgb, texture3D(colorCube, vec3((16 - 1.0) / 16) * outputColor.xyz + offset).rgb, 1);
 }
