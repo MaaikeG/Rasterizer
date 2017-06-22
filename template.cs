@@ -80,7 +80,7 @@ namespace Template_P3
                 Vector2 delta = lastMousePos - new Vector2(OpenTK.Input.Mouse.GetState().X, OpenTK.Input.Mouse.GetState().Y);
 
                 game.cam.AddRotation(delta.X, delta.Y);
-         //       ResetCursor();
+                ResetCursor();
             }
         }
 
