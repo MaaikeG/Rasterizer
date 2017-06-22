@@ -80,6 +80,7 @@
     <Compile Include="surface.cs" />
     <Compile Include="template.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="texture3d.cs" />
     <Compile Include="texture.cs" />
   </ItemGroup>
   <ItemGroup>
