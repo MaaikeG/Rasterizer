@@ -20,7 +20,7 @@ namespace template_P3
         internal void Render(Shader shader, Matrix4 parentTransform, Plane[] bb, float frameDuration)
         {
             Matrix4 transform = GetLocalTransform(parentTransform, frameDuration);
-            if (this.mesh != null && this.IsInViewFrustrum(bb, transform)) this.mesh.Render(shader, transform, frameDuration);
+            if (this.mesh != null && this.IsInViewFrustrum(bb, parentTransform)) this.mesh.Render(shader, transform, frameDuration);
 
             foreach (Node child in this.children)
             {
@@ -36,7 +36,7 @@ namespace template_P3
                 s.origin = Vector3.Transform(s.origin, transform);
                 for (int i = 0; i < 6; i++)
                 {
-                    if (Vector3.Dot(s.origin, bb[i].normal) + bb[i].d > s.r)
+                    if (Vector3.Dot(s.origin, bb[i].normal) + bb[i].d - s.r > 0)
                         return false;
                 }
             }

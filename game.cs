@@ -31,7 +31,7 @@ namespace Template_P3
             shader = new Shader("../../shaders/vs.glsl", "../../shaders/fs.glsl");
             postproc = new Shader("../../shaders/vs_post.glsl", "../../shaders/fs_post.glsl");
 
-            colorCube = new Texture3d("../../assets/ColorLookupTexture.jpg");
+            colorCube = new Texture3d("../../assets/OriginalColors.jpg");
 
             // load a texture
             Texture wood = new Texture("../../assets/wood.jpg");
