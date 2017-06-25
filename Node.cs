@@ -17,14 +17,16 @@ namespace template_P3
 
         public int PI { get; private set; }
 
-        internal void Render(Shader shader, Matrix4 parentTransform, Plane[] bb, float frameDuration)
+        internal void Render(Shader shader, Matrix4 parentTransform, Matrix4 world, Plane[] bb, float frameDuration)
         {
-            Matrix4 transform = GetLocalTransform(parentTransform, frameDuration);
-            if (this.mesh != null && this.IsInViewFrustrum(bb, transform)) this.mesh.Render(shader, transform, frameDuration);
+            Matrix4 transform = GetLocalTransform(world, parentTransform, frameDuration);
+            world = transform * world;
+            transform *= parentTransform;
+            if (mesh != null && this.IsInViewFrustrum(bb, transform)) mesh.Render(shader, transform, world);
 
             foreach (Node child in this.children)
             {
-                child.Render(shader, transform, bb, frameDuration);
+                child.Render(shader, transform, world, bb, frameDuration);
             }
         }
 
@@ -66,16 +68,16 @@ namespace template_P3
             return new Sphere(o, (float)Math.Sqrt(r2));
         }
 
-        private Matrix4 GetLocalTransform(Matrix4 parentTransform, float frameDuration)
+        private Matrix4 GetLocalTransform(Matrix4 world, Matrix4 parentTransform, float frameDuration)
         {
             Matrix4 transform = Matrix4.Identity;
-            if (this.localRotate != new Vector3())
+       
+            if (localRotate != Vector3.Zero)
             {
-                transform = Matrix4.CreateFromAxisAngle(this.localRotate, a);
+                transform = Matrix4.CreateFromAxisAngle(localRotate, a);
             }
-            transform *= Matrix4.CreateScale(this.scale);
-            transform *= Matrix4.CreateTranslation(this.localTranslate);
-            transform *= parentTransform;
+            transform *= Matrix4.CreateScale(scale);
+            transform *= Matrix4.CreateTranslation(localTranslate);
 
             // update rotation
             a += 0.001f * frameDuration;
@@ -86,7 +88,7 @@ namespace template_P3
 
         internal void AddChild(Node node)
         {
-            this.children.Add(node);
+            children.Add(node);
         }
     }
 }
