@@ -89,7 +89,6 @@ namespace Template_P3
         public void Tick()
         {
             screen.Clear(0);
-            screen.Print("hello world", 2, 2, 0xffff00);
         }
 
         // tick for OpenGL rendering code
