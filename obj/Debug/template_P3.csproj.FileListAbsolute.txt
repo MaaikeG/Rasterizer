@@ -20,3 +20,6 @@ C:\Users\wzwie\OneDrive\Documents\GitHub\Rasterizer\bin\Debug\OpenTK.dll
 C:\Users\wzwie\OneDrive\Documents\GitHub\Rasterizer\bin\Debug\OpenTK.dll.config
 C:\Users\wzwie\OneDrive\Documents\GitHub\Rasterizer\obj\Debug\template_P3.exe
 C:\Users\wzwie\OneDrive\Documents\GitHub\Rasterizer\obj\Debug\template_P3.pdb
+E:\Data\Github\Rasterizer\bin\Debug\template_P3.exe.config
+E:\Data\Github\Rasterizer\obj\Debug\template_P3.exe
+E:\Data\Github\Rasterizer\obj\Debug\template_P3.pdb

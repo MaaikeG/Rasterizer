@@ -12,3 +12,13 @@ Generic colorization using color cube - Found in the shaders/fs_post.glsl file. 
 
 Used resources:
 https://neokabuto.blogspot.nl/2015/12/opentk-tutorial-8-part-2-adding.html To learn about Phong shading. We did not use the code of this blog, but we can not deny that we looked carefully at the implementation.
+http://neokabuto.blogspot.nl/2014/01/opentk-tutorial-5-basic-camera.html Used to create the camera class
+
+Controls:
+w = forwards
+s = backwards
+a = left
+d = right
+e = up
+q = down
+m = toggle mousecontrol
