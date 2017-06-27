@@ -28,7 +28,8 @@ void main()
     lightVector = normalize( lightVector );
     vec3 materialColor = texture( pixels, uv ).xyz;
     float attenuation = 1.0f / (dist * dist);
-    outputColor = outputColor + vec4( materialColor * max( 0.0f, dot( lightVector, normal.xyz ) ) * attenuation * lightColor, 1 );
+    float diffuse = max( 0.0f, dot( lightVector, normal.xyz ) );
+    outputColor = outputColor + vec4( materialColor * diffuse * attenuation * lightColor, 1 );
     
     // Specular lighting
     vec3 reflectionVector = normalize(reflect(-lightVector, normal.xyz));
@@ -36,5 +37,5 @@ void main()
     float specularExponent = 20;
     float specularIntensity = 0.8;
     float specularReflection = pow(max(dot(reflectionVector, viewVector), 0.0), specularExponent);
-    outputColor = outputColor + vec4(specularIntensity * lightColor, 0.0) * specularReflection;
+    outputColor = outputColor + vec4(specularIntensity * lightColor, 0.0) * specularReflection * diffuse;
 }
