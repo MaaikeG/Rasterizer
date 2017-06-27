@@ -39,7 +39,7 @@ namespace template_P3
                 s.origin = Vector3.Transform(s.origin, transform);
                 for (int i = 0; i < 6; i++)
                 {
-                    if (Vector3.Dot(bb[i].normal, s.origin) - s.r > 0)
+                    if (Vector3.Dot(bb[i].normal, s.origin) + s.r < 0)
                         return false;
                 }
             }
