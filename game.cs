@@ -58,7 +58,7 @@ namespace Template_P3
             bigteapot.AddChild(babyTeapot);
             Node world = new Node();
 
-            world.AddChild(new Node{
+            world.AddChild(new Node {
                 mesh = new Mesh("../../assets/floor.obj") { texture = wood },
                 localTranslate = new Vector3(0, -4, -15)
             });
