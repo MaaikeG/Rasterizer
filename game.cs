@@ -51,7 +51,7 @@ namespace Template_P3
             Node babyTeapot = new Node() {
                 mesh = teapot,
                 localTranslate = new Vector3(-5, 2, -7),
-                scale = 1f,
+                scale = 0.3f,
                 localRotate = new Vector3(0, 1, 0)
             };
 
@@ -107,7 +107,7 @@ namespace Template_P3
             target.Bind();
 
             viewProjectMatrix = cameraPos * Matrix4.CreatePerspectiveFieldOfView(1.2f, 1.3f, .1f, 1000);
-            
+
             // render the scene
             scene.Render(shader, viewProjectMatrix, frameDuration);
 
