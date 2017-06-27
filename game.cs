@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
 using OpenTK;
+using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL;
 using template_P3;
 
 // minimal OpenTK rendering framework for UU/INFOGR
@@ -31,7 +33,7 @@ namespace Template_P3
             shader = new Shader("../../shaders/vs.glsl", "../../shaders/fs.glsl");
             postproc = new Shader("../../shaders/vs_post.glsl", "../../shaders/fs_post.glsl");
 
-            colorCube = new Texture3d("../../assets/OriginalColors.jpg");
+            colorCube = new Texture3d("../../assets/ColorLookupTexture.jpg");
 
             // load a texture
             Texture wood = new Texture("../../assets/wood.jpg");
@@ -49,7 +51,7 @@ namespace Template_P3
             Node babyTeapot = new Node() {
                 mesh = teapot,
                 localTranslate = new Vector3(-5, 2, -7),
-                scale = 0.3f,
+                scale = 1f,
                 localRotate = new Vector3(0, 1, 0)
             };
 
@@ -68,15 +70,25 @@ namespace Template_P3
             timer.Reset();
             timer.Start();
 
+            // create the render target
             target = new RenderTarget(screen.width, screen.height);
             quad = new ScreenQuad();
+
+            GL.UseProgram(shader.programID);
+            // Ambient light
+            GL.Uniform3(shader.uniform_ambientLight, new Vector3(0.2f, 0.1f, 0.1f));
+            
+            // A bright lamp
+            Light lamp = new Light(new Vector3(0f, 2f, 10f), new Vector3(10f, 10f, 8f));
+            GL.Uniform3(shader.lightPosition, lamp.localTranslate);
+            GL.Uniform3(shader.lightColor, lamp.color);
+
         }
 
         // tick for background surface
         public void Tick()
         {
             screen.Clear(0);
-            screen.Print("hello world", 2, 2, 0xffff00);
         }
 
         // tick for OpenGL rendering code
@@ -87,11 +99,15 @@ namespace Template_P3
             timer.Reset();
             timer.Start();
 
+            GL.UseProgram(shader.programID);
+            Matrix4 cameraPos = cam.GetViewMatrix();
+            GL.Uniform3(shader.camPosition, new Vector3(cameraPos.M13, cameraPos.M23, cameraPos.M33));
+
             // enable render target
             target.Bind();
 
-            viewProjectMatrix = cam.GetViewMatrix() * Matrix4.CreatePerspectiveFieldOfView(1.2f, 1.3f, .1f, 1000);
-
+            viewProjectMatrix = cameraPos * Matrix4.CreatePerspectiveFieldOfView(1.2f, 1.3f, .1f, 1000);
+            
             // render the scene
             scene.Render(shader, viewProjectMatrix, frameDuration);
 

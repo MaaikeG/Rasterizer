@@ -11,7 +11,7 @@ namespace template_P3
         {
             var bb = this.GetSceneBoundingBox(transform);
 
-            world.Render(shader, transform, bb, frameDuration);
+            world.Render(shader, transform, Matrix4.Identity, bb, frameDuration);
         }
 
 

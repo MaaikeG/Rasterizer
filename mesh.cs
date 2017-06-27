@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System.Collections.Generic;
+using template_P3;
 
 namespace Template_P3
 {
@@ -24,6 +25,12 @@ namespace Template_P3
         int triangleBufferId;                   // triangle buffer
         int quadBufferId;                       // quad buffer
 
+
+        internal void SetTexture(Texture texture)
+        {
+            this.texture = texture;
+        }
+
         // constructor
         public Mesh(string fileName)
         {
@@ -32,7 +39,7 @@ namespace Template_P3
         }
 
         // render the mesh using the supplied shader and matrix
-        public void Render(Shader shader, Matrix4 transform, float frameDuration)
+        public void Render(Shader shader, Matrix4 parentTransform, Matrix4 toWorld)
         {
             // on first run, prepare buffers
             Prepare(shader);
@@ -47,7 +54,8 @@ namespace Template_P3
             GL.UseProgram(shader.programID);
 
             // pass transform to vertex shader
-            GL.UniformMatrix4(shader.uniform_mview, false, ref transform);
+            GL.UniformMatrix4(shader.uniform_mview, false, ref parentTransform);
+            GL.UniformMatrix4(shader.uniform_toWorld, false, ref toWorld);
 
             // bind interleaved vertex data
             GL.EnableClientState(ArrayCap.VertexArray);
