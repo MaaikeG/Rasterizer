@@ -32,7 +32,7 @@ namespace template_P3
 
         internal bool IsInViewFrustrum(Plane[] bb, Matrix4 transform)
         {
-            if (mesh != null && doCulling)
+            if (mesh != null)
             {
                 Sphere s = GetBoundingSphere();
                 s.origin = Vector3.Transform(s.origin, transform);
