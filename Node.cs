@@ -34,6 +34,7 @@ namespace template_P3
         {
             if (mesh != null)
             {
+                transform.Transpose();
                 Sphere s = GetBoundingSphere();
                 s.origin = Vector3.Transform(s.origin, transform);
                 for (int i = 0; i < 6; i++)
